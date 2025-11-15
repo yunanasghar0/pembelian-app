@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Data Pembelian Aplikasi Premium</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #e8f1ff;
+      padding: 0;
+      margin: 0;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 480px;
+      background: white;
+      margin: 40px auto;
+      padding: 25px;
+      border-radius: 18px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+      border: 1px solid #d7e4ff;
+    }
+
+    h2 {
+      text-align: center;
+      color: #2b5eff;
+      margin-bottom: 20px;
+      font-weight: bold;
+    }
+
+    label {
+      font-size: 14px;
+      color: #333;
+      font-weight: bold;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      margin-bottom: 18px;
+      border-radius: 10px;
+      border: 1px solid #aac7ff;
+      background: #f6f9ff;
+      font-size: 14px;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      background: #2b5eff;
+      border: none;
+      color: white;
+      font-size: 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.2s;
+    }
+
+    button:hover {
+      background: #1d47cc;
+    }
+
+    .success {
+      margin-top: 15px;
+      padding: 12px;
+      background: #d4ffe0;
+      color: #007a20;
+      border-radius: 10px;
+      display: none;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .error {
+      margin-top: 15px;
+      padding: 12px;
+      background: #ffd4d4;
+      color: #a30000;
+      border-radius: 10px;
+      display: none;
+      text-align: center;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2>Input Pembelian</h2>
+
+  <form id="dataForm">
+    <label>Produk yang Dibeli</label>
+    <input type="text" name="produk" required>
+
+    <label>Modal Produk (Rp)</label>
+    <input type="number" name="modal" required>
+
+    <label>Harga Jual (Rp)</label>
+    <input type="number" name="harga_jual" required>
+
+    <button type="submit">Simpan Data</button>
+  </form>
+
+  <div class="success" id="successMessage">Data berhasil disimpan!</div>
+  <div class="error" id="errorMessage">Gagal mengirim data.</div>
+</div>
+
+<script>
+  const scriptURL = "https://script.google.com/macros/s/AKfycbwo8Cj8ryi4Jj-T4YSammYbtjuoJ8hTuQmHE-ZLS_UKJEDwOO_i1aWF_fBrYi9q-y73xg/exec"; // langkah 4
+
+  const form = document.getElementById("dataForm");
+  const successMsg = document.getElementById("successMessage");
+  const errorMsg = document.getElementById("errorMessage");
+
+  form.addEventListener("submit", e => {
+    e.preventDefault();
+
+    const formData = new FormData(form);
+    const data = {
+      produk: formData.get("produk"),
+      modal: formData.get("modal"),
+      harga_jual: formData.get("harga_jual")
+    };
+
+    fetch(scriptURL, {
+      method: "POST",
+      body: JSON.stringify(data)
+    })
+    .then(() => {
+      successMsg.style.display = "block";
+      errorMsg.style.display = "none";
+      form.reset();
+
+      setTimeout(() => {
+        successMsg.style.display = "none";
+      }, 2000);
+    })
+    .catch(() => {
+      successMsg.style.display = "none";
+      errorMsg.style.display = "block";
+    });
+  });
+</script>
+
+</body>
+</html>
